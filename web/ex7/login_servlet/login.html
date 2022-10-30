@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="form.css"/>
+    <script src="../../js/jquery-3.6.1.js"></script>
+    <script>
+        function check() {
+            let formData = $(".information");
+            let submit = true;
+            formData.each(function (idx, ele) {
+                if (ele.value === "") {
+                    ele.focus();
+                    alert("不可为空");
+                    submit = false;
+                    return false;
+                }
+            });
+            return submit;
+        }
+    </script>
+</head>
+<body>
+<h1 style="text-align: center">用户登录</h1>
+<div class="box">
+    <!--必须回退到web路径下，否则servlet路径错误-->
+    <form action="LoginServlet" method="post" onsubmit="return check();">
+        <div class="item">
+            <label class="label" for="un">用户名</label>
+            <input class="information" type="text" name="un" id="un">
+        </div>
+        <div class="item">
+            <label class="label" for="pw">密码</label>
+            <input class="information" type="password" name="pw" id="pw">
+        </div>
+        <div class="item div-button">
+            <input type="button" id="button-register" onclick="location.href='register.html'" value="注册">
+            <input type="submit" id="button-login" value="登录 ">
+        </div>
+    </form>
+</div>
+</body>
+</html>

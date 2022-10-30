@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册</title>
+    <script>
+        // 检查两次密码是否相同
+        function check() {
+            let password = document.getElementById("password").value;
+            // 四个标志变量验证四种字符
+            let Aflag, aflag, numflag, symflag;
+            Aflag = aflag = numflag = symflag = 0;
+            for (let i in password) {
+                if (password[i] >= 'A' && password[i] <= 'Z')
+                    Aflag = 1;
+                else if (password[i] >= 'a' && password[i] <= 'z')
+                    aflag = 1;
+                else if (password[i] >= '0' && password[i] <= '9')
+                    numflag = 1;
+                else
+                    symflag = 1;
+            }
+            if (Aflag && aflag && numflag && symflag)
+                document.getElementById('password-error').setAttribute('hidden', '');
+            else
+                document.getElementById("password-error").removeAttribute("hidden");
+            let confirmPassword = document.getElementById("confirm-password").value;
+            // 根据是否相同决定是否展示提示信息
+            if (password === confirmPassword)
+                document.getElementById('confirm-error').setAttribute('hidden', '');
+            else
+                document.getElementById("confirm-error").removeAttribute("hidden");
+            return password === confirmPassword && (Aflag && aflag && numflag && symflag);
+        }
+
+        // 获取表单值，依次添加给各展示标签
+        function resign() {
+            // 两次密码不一致，不展示注册信息
+            if (!check())
+                return;
+            let formResign = document.getElementById("form-resign");
+            // 标志展示多选结果的标签是否要被清空，每次执行函数都要先清空再循环填充
+            let resetFlag = 0;
+            // 遍历表单控件，不会包含不必要的标签
+            for (let i in formResign) {
+                let id = formResign[i].id;
+                let type = formResign[i].type;
+                let name = formResign[i].name;
+                let value = formResign[i].value;
+                let checked = formResign[i].checked;
+                // 跳过确认密码框
+                if (id === "confirm-password")
+                    continue;
+                // 在按钮处跳出循环
+                if (id === 'button-reset')
+                    break;
+                if (type === "radio") {
+                    // 写两个 if 是必要的，将选择控件 radio checkbox 与其他控件分离，便于分别根据 name 和 id 展示 value
+                    if (checked)
+                        document.getElementById("res-" + name).innerHTML = value;
+                } else if (type === "checkbox") {
+                    // 清空多选展示
+                    if (!resetFlag) {
+                        resetFlag = 1;
+                        document.getElementById("res-" + name).innerHTML = "";
+                    }
+                    if (checked) {
+                        // 多选结果通过追加子元素来展示
+                        let span = document.createElement("span");
+                        document.getElementById("res-" + name).appendChild(span).innerHTML = value;
+                    }
+                } else {
+                    // 其他控件依据 id 来展示 value
+                    document.getElementById("res-" + id).innerHTML = value;
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-box,
+        .result-box {
+            padding-top: 20px;
+            width: 50%;
+            height: 100%;
+            float: left;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .item {
+            margin: 0 auto;
+            padding: 5px 0;
+            width: 400px;
+            height: 55px;
+        }
+
+        .div-text {
+            height: 100px;
+        }
+
+        .label {
+            display: inline-block;
+            width: 145px;
+            vertical-align: top;
+        }
+
+        .information {
+            display: inline-block;
+            width: 200px;
+            height: 35px;
+        }
+
+        .item > input,
+        #password,
+        #confirm-password {
+            width: 196px;
+            height: 31px;
+        }
+
+        #password-error,
+        #confirm-error {
+            color: red;
+            /*最小字号限制 12px*/
+            font: 12px "Microsoft YaHei UI";
+            float: left;
+        }
+
+        .span-select span {
+            display: inline-block;
+            /*选项盒子等间距撑开*/
+            padding: 0 5px;
+        }
+
+        .text {
+            /*内部文字与边框的间距*/
+            padding: 5px 0;
+            width: 248px;
+            height: 78px;
+            /*取消文本域拖拽改变大小*/
+            resize: none;
+            /*调整字体与 input 一致*/
+            font: 14px "Microsoft YaHei UI";
+        }
+
+        #res-text {
+            width: 248px;
+            /*保留空白符序列，正常地进行换行*/
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+<div class="form-box">
+    <h2>学生注册</h2>
+    <!--提交时：执行 resign 函数，返回 false 阻止提交，防止页面刷新-->
+    <!--重置时：执行刷新页面，清空表单和信息展示部分-->
+    <form method="post" id="form-resign" onsubmit="resign();return false;" onreset="location.reload()">
+        <div class="item">
+            <!--label 添加 for 属性绑定控件，实现点击文字选中控件-->
+            <label class="label" for="username">用户名：</label>
+            <input class="information" type="text" placeholder="请输入用户名" id="username">
+        </div>
+        <div class="item">
+            <label class="label" for="password">密码：</label>
+            <span class="information">
+                <input type="password" placeholder="请输入密码" id="password" onblur="check()">
+                <span id="password-error" hidden>**密码需包含大写字母、小写字母、数字、特殊符号</span>
+            </span>
+        </div>
+        <div class="item">
+            <label class="label" for="confirm-password">确认密码：</label>
+            <span class="information">
+                <input type="password" placeholder="请再次输入密码" id="confirm-password" onblur="check()">
+                <span id="confirm-error" hidden>**两次输入的密码需一致</span>
+            </span>
+        </div>
+        <div class="item">
+            <label class="label" for="sex-man">性别：</label>
+            <span class="information span-select">
+                <span><input type="radio" name="sex" id="sex-man" value="男"><label for="sex-man">男</label></span>
+                <span><input type="radio" name="sex" id="sex-woman" value="女"><label for="sex-woman">女</label></span>
+            </span>
+        </div>
+        <div class="item">
+            <label class="label">爱好：</label>
+            <span class="information span-select">
+                <span><input type="checkbox" name="hobby" id="hobby-basketball" value="篮球"><label
+                        for="hobby-basketball">篮球</label></span>
+                <span><input type="checkbox" name="hobby" id="hobby-football" value="足球"><label
+                        for="hobby-football">足球</label></span>
+                <span><input type="checkbox" name="hobby" id="hobby-volleyball" value="排球"><label
+                        for="hobby-volleyball">排球</label></span>
+            </span>
+        </div>
+        <div class="item">
+            <label class="label" for="departments">所在学院：</label>
+            <select class="information" id="departments">
+                <option>信息与计算机工程学院</option>
+                <option>林学院</option>
+                <option>生命学院</option>
+            </select>
+        </div>
+        <div class="item">
+            <label class="label" for="month">出生日期：</label>
+            <input class="information" type="month" id="month">
+        </div>
+        <div class="item">
+            <label class="label" for="phone">手机号码：</label>
+            <input class="information" type="tel" placeholder="请输入手机号码" id="phone">
+        </div>
+        <div class="item div-text">
+            <label class="label" for="text">学生专业能力说明：</label>
+            <textarea class="information text" id="text" placeholder="请说明专业能力"></textarea>
+        </div>
+        <div class="item div-button">
+            <input type="reset" id="button-reset">
+            <input type="submit" id="button-submit">
+        </div>
+    </form>
+</div>
+<div class="result-box">
+    <h2>信息展示</h2>
+    <div class="item">
+        <span class="label">用户名：</span>
+        <span class="information" id="res-username"></span>
+    </div>
+    <div class="item">
+        <span class="label">密码：</span>
+        <span class="information" id="res-password"></span>
+    </div>
+    <div class="item">
+        <span class="label">性别：</span>
+        <span class="information" id="res-sex"></span>
+    </div>
+    <div class="item">
+        <span class="label">爱好：</span>
+        <span class="information" id="res-hobby"></span>
+    </div>
+    <div class="item">
+        <span class="label">所在学院：</span>
+        <span class="information" id="res-departments"></span>
+    </div>
+    <div class="item">
+        <span class="label">出生日期：</span>
+        <span class="information" id="res-month"></span>
+    </div>
+    <div class="item">
+        <span class="label">手机号码：</span>
+        <span class="information" id="res-phone"></span>
+    </div>
+    <div class="item div-text">
+        <span class="label">学生专业能力说明：</span>
+        <span class="information" id="res-text"></span>
+    </div>
+</div>
+</body>
+</html>

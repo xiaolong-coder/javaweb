@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="form.css"/>
+    <script src="../../js/jquery-3.6.1.js"></script>
+    <script>
+        function check() {
+            let formData = $(".information");
+            let submit = true;
+            formData.each(function (idx, ele) {
+                if (ele.value === "") {
+                    ele.focus();
+                    alert("不可为空");
+                    submit = false;
+                    return false;
+                }
+            });
+            return submit;
+        }
+    </script>
+</head>
+<body>
+<h1 style="text-align: center">用户注册</h1>
+<div class="box">
+    <form action="register.jsp" method="post" onsubmit="return check();">
+        <div class="item">
+            <label class="label" for="un">用户名</label>
+            <input class="information" type="text" name="un" id="un">
+        </div>
+        <div class="item">
+            <label class="label" for="pw">密码</label>
+            <input class="information" type="text" name="pw" id="pw">
+        </div>
+        <div class="item">
+            <label class="label">性别：</label>
+            <span class="information span-select">
+                <span><input type="radio" name="sex" id="sex-man" value="man" checked><label
+                        for="sex-man">男</label></span>
+                <span><input type="radio" name="sex" id="sex-woman" value="woman"><label
+                        for="sex-woman">女</label></span>
+            </span>
+        </div>
+        <div class="item">
+            <label class="label" for="age">年龄</label>
+            <input class="information" type="text" name="age" id="age">
+        </div>
+        <div class="item">
+            <label class="label" for="home">籍贯</label>
+            <input class="information" type="text" name="home" id="home">
+        </div>
+        <div class="item">
+            <label class="label" for="grade">成绩</label>
+            <input class="information" type="text" name="grade" id="grade">
+        </div>
+        <div class="item div-button">
+            <input type="submit" id="button-submit">
+        </div>
+    </form>
+</div>
+</body>
+</html>
