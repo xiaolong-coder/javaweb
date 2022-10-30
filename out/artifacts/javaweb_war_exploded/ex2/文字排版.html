@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文字排版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            /*调整锚点定位*/
+            scroll-padding-top: 40px;
+        }
+
+        p {
+            text-indent: 2em;
+        }
+
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        a:hover {
+            background-color: orange;
+        }
+
+        ul, ol {
+            list-style: none;
+        }
+
+        .nav {
+            width: 100%;
+            height: 40px;
+            background-color: white;
+            text-align: center;
+            line-height: 40px;
+            /*导航栏固定顶部*/
+            position: fixed;
+            top: 0;
+            box-shadow: 0 1px 10px;
+        }
+
+        .nav span {
+            /*等间距*/
+            padding: 0 15px;
+        }
+
+        .center {
+            /*控制距导航栏和侧边的距离*/
+            margin: 60px 178px;
+        }
+
+        .header {
+            text-align: right;
+        }
+
+        .headline {
+            text-align: center;
+        }
+
+        img .wordcount {
+            width: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="nav">
+    <span><a href="#abstract">摘要</a></span>
+    <span><a href="#introduction">介绍</a></span>
+    <span><a href="#model">编程模型</a></span>
+    <span><a href="#example">例子</a></span>
+    <span><a href="#types">类型</a></span>
+</div>
+<div class="center">
+    <div class="header">Google MapReduce 中文版 1.0 版</div>
+    <h1 class="headline">Google MapReduce 中文版<sup> 1</sup></h1>
+
+    <h2 class="title" id="abstract">摘要</h2>
+    <p>
+        MapReduce 是一个编程模型，也是一个处理和生成超大数据集的算法模型的相关实现。用户首先创建一个 Map 函数处理一个基于
+        key/value pair 的数据集合，输出中间的基于 key/value pair 的数据集合；然后再创建一个 Reduce 函数用来合并所有的具有相同中间
+        key 值的中间 value 值。现实世界中有很多满足上述处理模型的例子，本论文将详细描述这个模型。
+    </p>
+    <p>
+        MapReduce 架构的程序能够在大量的普通配置的计算机上实现并行化处理。这个系统在运行时只关心：
+        如何分割输入数据，在大量计算机组成的集群上的调度，集群中计算机的错误处理，管理集群中计算机之间
+        必要的通信。采用 MapReduce 架构可以使那些没有并行计算和分布式处理系统开发经验的程序员有效利用分
+        布式系统的丰富资源。
+    </p>
+    <p>
+        我们的 MapReduce 实现运行在规模可以灵活调整的由普通机器组成的集群上：一个典型的 MapReduce
+        计算往往由几千台机器组成、处理以 TB 计算的数据。程序员发现这个系统非常好用：已经实现了数以百计
+        的 MapReduce 程序，在 Google 的集群上，每天都有 1000 多个 MapReduce 程序在执行。
+    </p>
+
+    <ul>
+        <li>
+            <h2 class="title" id="introduction">1 介绍</h2>
+            <p>
+                在过去的 5 年里，包括本文作者在内的 Google 的很多程序员，为了处理海量的原始数据，已经实现了数
+                以百计的、专用的计算方法。这些计算方法用来处理大量的原始数据，比如，文档抓取（类似网络爬虫的程
+                序）、Web 请求日志等等；也为了计算处理各种类型的衍生数据，比如倒排索引、Web 文档的图结构的各种表
+                示形势、每台主机上网络爬虫抓取的页面数量的汇总、每天被请求的最多的查询的集合等等。大多数这样的
+                数据处理运算在概念上很容易理解。然而由于输入的数据量巨大，因此要想在可接受的时间内完成运算，只
+                有将这些计算分布在成百上千的主机上。如何处理并行计算、如何分发数据、如何处理错误？所有这些问题
+                综合在一起，需要大量的代码处理，因此也使得原本简单的运算变得难以处理。
+            </p>
+            <p>
+                为了解决上述复杂的问题，我们设计一个新的抽象模型，使用这个抽象模型，我们只要表述我们想要执行的简单运算即可，而不必关心并行计算、容错、数据分布、负载均衡等复杂的细节，这些问题都被
+                封装在了一个库里面。设计这个抽象模型的灵感来自
+                Lisp 和许多其他函数式语言的 Map 和 Reduce的原语。我们意识到我们大多数的运算都包含这样的操作：在输入数据的“逻辑”记录上应用
+                Map 操作得出一个中间 key/valuepair 集合，然后在所有具有相同 key 值的 value 值上应用
+                Reduce操作，从而达到合并中间的数据，得到一个想要的结果的目的。使用MapReduce 模型，再结合用户实现的 Map 和
+                Reduce
+                函数，我们就可以非常容易的实现大规模并行化计算；通过 MapReduce模型自带的“再次执行”（re-execution）功能，也提供了初级的容灾实现方案。
+            </p>
+            <p>
+                这个工作(实现一个 MapReduce 框架模型)的主要贡献是通过简单的接口来实现自动的并行化和大规模
+                的分布式计算，通过使用 MapReduce 模型接口实现在大量普通的 PC 机上高性能计算。
+            </p>
+
+            <ol style="text-indent: 2em;">
+                <li>第二部分描述基本的编程模型和一些使用案例。</li>
+                <li>第三部分描述了一个经过裁剪的、适合我们的基于集群的计算环境的 MapReduce 实现。</li>
+                <li>第四部分描述我们认为在 MapReduce 编程模型中一些实用的技巧。</li>
+                <li>第五部分对于各种不同的任务，测量我们 MapReduce 实现的性能。</li>
+                <li>第六部分揭示了在 Google 内部如何使用 MapReduce 作为基础重写我们的索引系统产品，包括其它一些使用 MapReduce 的经验。</li>
+                <li>第七部分讨论相关的和未来的工作。</li>
+            </ol>
+
+        </li>
+
+        <li>
+            <h2 class="title" id="model">2 编程模型</h2>
+            <p>
+                MapReduce 编程模型的原理是：利用一个输入 key/value pair 集合来产生一个输出的 key/value pair 集合。
+                MapReduce 库的用户用两个函数表达这个计算：Map 和 Reduce。
+            </p>
+            <p>
+                用户自定义的 Map 函数接受一个输入的 key/value pair 值，然后产生一个中间 key/value pair 值的集合。
+                MapReduce 库把所有具有相同中间 key 值 I 的中间 value 值集合在一起后传递给 reduce 函数。
+            </p>
+            <p>
+                用户自定义的 Reduce 函数接受一个中间 key 的值 I 和相关的一个 value 值的集合。Reduce 函数合并这些
+                value 值，形成一个较小的 value 值的集合。一般的，每次 Reduce 函数调用只产生 0 或 1 个输出 value 值。通
+                常我们通过一个迭代器把中间 value 值提供给 Reduce 函数，这样我们就可以处理无法全部放入内存中的大量
+                的 value 值的集合。
+            </p>
+
+            <ol>
+                <li>
+                    <h3 class="title" id="example"><b><i><u>2.1 例子</u></i></b></h3>
+                    <p>
+                        例如，计算一个大的文档集合中每个单词出现的次数，下面是伪代码段：
+                    </p>
+                    <img src="../img/wordcount.png" alt="图片加载失败" class="wordcount" height="380px">
+                    <p>
+                        Map 函数输出文档中的每个词、以及这个词的出现次数(在这个简单的例子里就是 1)。Reduce 函数把 Map
+                        函数产生的每一个特定的词的计数累加起来。
+                    </p>
+                    <p>
+                        另外，用户编写代码，使用输入和输出文件的名字、可选的调节参数来完成一个符合 MapReduce 模型规
+                        范的对象，然后调用 MapReduce 函数，并把这个规范对象传递给它。用户的代码和 MapReduce 库链接在一起
+                        (用 C++实现)。附录 A 包含了这个实例的全部程序代码。
+                    </p>
+                </li>
+
+                <li>
+                    <h3 class="title" id="types"><b><i><u>2.2 类型</u></i></b></h3>
+                    <p>
+                        尽管在前面例子的伪代码中使用了以字符串表示的输入输出值，但是在概念上，用户定义的Map和Reduce
+                        函数都有相关联的类型：
+                    </p>
+                </li>
+            </ol>
+        </li>
+    </ul>
+
+    <hr>
+
+    <div>
+        <ul class="foot">
+            <li>
+                <sup class="number">1</sup>译者 alex，原文地址 <a href="http://blademaster.ixiezi.com">http://blademaster.ixiezi.com</a>
+            </li>
+        </ul>
+        <div>
+            作者/编著者：阎伟 邮件: andy.yanwei@163.com 博客: <a href="http://andyblog.sinaapp.com" target="_blank">http://andyblog.sinaapp.com</a>
+            微博：<a href="http://weibo.com/2152410864" target="_blank">http://weibo.com/2152410864</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

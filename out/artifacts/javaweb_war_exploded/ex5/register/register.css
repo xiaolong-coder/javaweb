@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.form-box,
+.result-box {
+    padding-top: 20px;
+}
+
+h2 {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.item {
+    margin: 25px auto;
+    width: 350px;
+    height: 35px;
+}
+
+.label {
+    display: inline-block;
+    width: 145px;
+    vertical-align: middle;
+}
+
+.information {
+    display: inline-block;
+    width: 200px;
+    height: 35px;
+}
+
+.item > span {
+    font: 16px/35px "Microsoft YaHei UI";
+    vertical-align: middle;
+}
+
+.item > input {
+    width: 196px;
+    height: 31px;
+}
+
+.div-button input {
+    width: 170px;
+}
+
+.span-select span {
+    display: inline-block;
+    /*选项盒子等间距撑开*/
+    padding: 0 5px;
+}

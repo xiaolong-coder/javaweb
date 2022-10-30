@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>投票</title>
+    <link rel="stylesheet" href="vote.css"/>
+</head>
+<body>
+<div class="box">
+    <form action="result.jsp" method="post">
+        <div class="item">
+            <span>您最喜欢的主食是：</span><br>
+            <span class="information span-select">
+                <input type="radio" name="major" value="0" id="major1" checked><label for="major1">馒头</label><br>
+                <input type="radio" name="major" value="1" id="major2"><label for="major2">米饭</label><br>
+                <input type="radio" name="major" value="2" id="major3"><label for="major3">面条</label><br>
+            </span>
+        </div>
+        <div class="item">
+            <span class="label">您最喜欢的食堂是：</span><br>
+            <span class="information span-select">
+                <input type="radio" name="place" value="0" id="place1" checked><label for="place1">俭德园</label><br>
+                <input type="radio" name="place" value="1" id="place2"><label for="place2">颐丰园</label><br>
+                <input type="radio" name="place" value="2" id="place3"><label for="place3">专家公寓</label><br>
+            </span>
+        </div>
+        <div class="item div-button">
+            <input type="submit" id="button-submit">
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.box {
+    padding-top: 20px;
+}
+
+h2 {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.item {
+    margin: 25px auto;
+    width: 150px;
+}
+
+.label {
+    display: inline-block;
+    width: 145px;
+    vertical-align: middle;
+}
+
+.information {
+    display: inline-block;
+}
+
+.item > span {
+    font: 16px/35px "Microsoft YaHei UI";
+    vertical-align: middle;
+}
+
+.item > input {
+    width: 196px;
+    height: 31px;
+}

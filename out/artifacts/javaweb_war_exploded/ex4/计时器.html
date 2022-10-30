@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>计时器</title>
+    <script src="../js/jquery-3.6.1.js"></script>
+    <script>
+        // 初始时间，单位：s
+        var stdnum = 3;
+        var num = stdnum;
+        // setInterval 返回对象
+        var clock;
+        // 开始标志，防止多次开始
+        var startFlag = 0;
+
+        // 字符串格式化输出
+        function zero(num) {
+            return num > 9 ? num : ("0" + num);
+        }
+
+        // 打印时间
+        function showClock() {
+            // js 除法结果为实数，舍去小数部分
+            let hour = Math.floor(num / 3600);
+            let minute = Math.floor(num / 60 % 60);
+            let second = num % 60;
+            $(".clock").html(zero(hour) + ":" + zero(minute) + ":" + zero(second));
+        }
+
+        function countClock() {
+            num--;
+            // 到零手动重置为零并停止定时任务
+            if (num <= 0)
+                restartClock(0);
+            showClock();
+        }
+
+        function startClock() {
+            // 开始计时标志为零，表示未开始计时
+            if (startFlag === 0) {
+                startFlag = 1;
+                // 延迟一秒后调用 countClock 保证第一秒准确
+                // 立刻执行使用 setInterval(fun(), 1000)，此时 fun 应 return fun;
+                clock = setInterval(countClock, 1000);
+            }
+        }
+
+        function stopClock() {
+            clearInterval(clock);
+            startFlag = 0;
+        }
+
+        function restartClock(resnum) {
+            clearInterval(clock);
+            startFlag = 0;
+            num = resnum;
+        }
+
+        $(function () {
+            showClock();
+            $("#start").click(function () {
+                startClock();
+            })
+            $("#stop").click(function () {
+                stopClock();
+            })
+            $("#restart").click(function () {
+                restartClock(stdnum);
+                showClock();
+            })
+        })
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 10px;
+            text-align: center;
+            font: 700 32px "Microsoft YaHei UI";
+        }
+
+        input {
+            width: 80px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="clock"></div>
+    <input type="button" value="开始计时" id="start">
+    <input type="button" value="暂停计时" id="stop">
+    <input type="button" value="重置计时" id="restart">
+</div>
+</body>
+</html>
